@@ -1,3 +1,5 @@
+**简体中文** ｜ [English](README_EN.md)
+
 # ATFOpenAdSDK HarmonyOS Demo
 
 ATFOpenAdSDK 的 HarmonyOS 示例工程与接入文档。本仓库同时包含可直接运行的 Demo App 与 SDK 接入说明。
