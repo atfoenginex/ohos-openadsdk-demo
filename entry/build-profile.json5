@@ -3,14 +3,15 @@
   "buildOption": {
     "arkOptions": {
       "buildProfileFields": {
-        "DEMO_APP_ID": "102442",
-        "DEMO_MEDIA_ID": "1788508686888",
-        "DEMO_SECRET_KEY": "04815e17b3ebe81b",
-        "DEMO_OAID": "12345678-1234-1234-1234-123456789012",
-        "DEMO_SPLASH_SLOT_ID": "4J8B87V9",
-        "DEMO_FEED_SLOT_ID": "3ZE2NYFD",
-        "DEMO_INTERSTITIAL_SLOT_ID": "4KLEE2X2",
-        "DEMO_REWARD_SLOT_ID": "52AVED98"
+        // 首次运行前，请把这些占位常量替换为你在 ATF 后台申请到的真实值。
+        // 未替换时 Demo 能编译，但 SDK 初始化会失败、广告请求不会返回。
+        "DEMO_APP_ID": "YOUR_APP_ID",
+        "DEMO_MEDIA_ID": "YOUR_MEDIA_ID",
+        "DEMO_SECRET_KEY": "YOUR_SECRET_KEY",
+        "DEMO_SPLASH_SLOT_ID": "YOUR_SPLASH_SLOT_ID",
+        "DEMO_INTERSTITIAL_SLOT_ID": "YOUR_INTERSTITIAL_SLOT_ID",
+        "DEMO_REWARD_SLOT_ID": "YOUR_REWARD_SLOT_ID",
+        "DEMO_FEED_SLOT_ID": "YOUR_FEED_SLOT_ID"
       }
     }
   },

@@ -1,71 +1,286 @@
-# ATFOHAdSDK 鸿蒙接入示例
+# ATFOpenAdSDK HarmonyOS Demo
 
-`@atf/openadsdk`（鸿蒙广告 SDK）的**可运行接入示例**。本仓库依赖的是 **ohpm 私仓上已发布的版本**，不是 SDK 源码，所以它同时是一份「接入方视角」的参考实现，可以直接对照着改到你自己的 App 里。
+ATFOpenAdSDK 的 HarmonyOS 示例工程与接入文档。本仓库同时包含可直接运行的 Demo App 与 SDK 接入说明。
 
-| 包 | 本示例使用的版本 |
-|---|---|
-| `@atf/openadsdk` | 0.0.2 |
-| `@atf/gromore` | 0.0.1 |
+---
 
-## 环境准备
+## 目录
 
-1. **DevEco Studio**（含 hvigor 与 ohpm）。下面的命令假定它装在 `/Applications/DevEco-Studio.app`。
-2. **配置 `@atf` 私仓**。本仓库根目录的 `.ohpmrc` 已写好，正常 clone 后即可用：
+- [1. 简介](#1-简介)
+- [2. 环境要求](#2-环境要求)
+- [3. 快速开始：运行 Demo](#3-快速开始运行-demo)
+- [4. 集成到你的 App](#4-集成到你的-app)
+- [5. SDK 初始化](#5-sdk-初始化)
+- [6. 广告接入](#6-广告接入)
+- [7. 厂商适配器](#7-厂商适配器)
+- [8. 权限](#8-权限)
+- [9. 常见问题](#9-常见问题)
 
-   ```ini
-   @atf:registry=https://ohpm.cxwlad.com/repos/ohpm/
-   registry=https://ohpm.openharmony.cn/ohpm/,https://artifact.bytedance.com/repository/byted-ohpm/
-   ```
+---
 
-   - 第一行：SDK 本体与已发布适配器所在的私仓。**需要凭据**，账号由 SDK 负责人分配；
-     凭据写在你自己的 `~/.ohpm/.ohpmrc`（不要提交到仓库）。
-   - 第二行：`@atf/gromore` 依赖 `@csj/openadsdk`，它只在**字节 ohpm 仓库**有坐标，
-     所以必须带上 `https://artifact.bytedance.com/repository/byted-ohpm/`（注意是 `byted-ohpm`）。
+## 1. 简介
 
-## 运行
+ATFOpenAdSDK 是 ATF 提供的 HarmonyOS 广告 SDK，支持开屏、插屏、激励视频、信息流与原生自渲染广告，并可通过适配器接入多家三方广告源参与竞价。
 
-在仓库根目录：
+本仓库提供：
+
+- 可直接运行的 Demo 工程 `entry/`
+- 覆盖全部广告类型的示例代码 `entry/src/main/ets/pages/`
+- 集中管理演示参数的配置文件 `entry/build-profile.json5`
+
+Demo 内置以下广告能力示例：
+
+| 广告类型 | 入口 | 说明 |
+| --- | --- | --- |
+| 开屏广告 | `SplashAdPage.ets` | 全屏开屏，支持宿主自定义底部视图与跳过 |
+| 插屏广告 | `InterstitialAdPage.ets` | 全屏插屏，支持横竖屏模板 |
+| 激励视频 | `RewardVideoAdPage.ets` | 支持播放完成与奖励回调 |
+| 信息流（模板） | `FeedAdPage.ets` | SDK 模板渲染 |
+| 信息流（自渲染） | `NativeAdPage.ets` | 媒体自定义渲染视图 |
+
+> Demo 还提供 Mock 数据开关、广告有效性检查与日志面板等辅助能力。
+
+## 2. 环境要求
+
+| 项 | 要求 |
+| --- | --- |
+| DevEco Studio | 5.0 及以上 |
+| HarmonyOS | 5.0.1(13) 及以上 |
+| 语言 | ArkTS |
+
+## 3. 快速开始：运行 Demo
 
 ```bash
-export DEVECO_SDK_HOME="/Applications/DevEco-Studio.app/Contents/sdk"
-export NODE_HOME="/Applications/DevEco-Studio.app/Contents/tools/node"
-export PATH="$NODE_HOME/bin:/Applications/DevEco-Studio.app/Contents/tools/ohpm/bin:$PATH"
-OHPM="/Applications/DevEco-Studio.app/Contents/tools/ohpm/bin/ohpm"
-HV="/Applications/DevEco-Studio.app/Contents/tools/hvigor/bin/hvigorw"
+# 1. 克隆仓库
+git clone git@github.com:atfoenginex/ohos-openadsdk-demo.git
+cd ohos-openadsdk-demo
 
-"$OHPM" install --all
-"$HV" assembleHap --mode module -p module=entry@default -p product=default --no-daemon
+# 2. 替换演示参数（见下）
+#    编辑 entry/build-profile.json5，把所有 YOUR_* 占位符替换为真实值
+
+# 3. 安装依赖
+ohpm install --all
+
+# 4. 构建
+hvigorw assembleHap --mode module -p module=entry@default -p product=default --no-daemon
 ```
+
+**必须先完成第 2 步。** 仓库内的 `entry/build-profile.json5` 只包含占位常量，未替换前 SDK 无法初始化，广告请求也不会返回。
+
+`entry/build-profile.json5` 需要替换的常量：
+
+| 常量 | 说明 |
+| --- | --- |
+| `DEMO_APP_ID` | SDK App ID |
+| `DEMO_MEDIA_ID` | SDK Media ID |
+| `DEMO_SECRET_KEY` | SDK Secret Key |
+| `DEMO_SPLASH_SLOT_ID` | 开屏广告位 ID |
+| `DEMO_INTERSTITIAL_SLOT_ID` | 插屏广告位 ID |
+| `DEMO_REWARD_SLOT_ID` | 激励视频广告位 ID |
+| `DEMO_FEED_SLOT_ID` | 信息流广告位 ID |
 
 装到设备：用 DevEco Studio 打开本工程，**Project Structure → Signing Configs** 勾选自动签名
-（本仓库不含任何签名材料，`build-profile.json5` 里也没有 `signingConfigs`），然后直接 Run。
+（本仓库不含任何签名材料，`build-profile.json5` 中也没有 `signingConfigs`），然后直接 Run。
 
-## 目录结构
+## 4. 集成到你的 App
 
-```
-ohos-openadsdk-demo/
-├── .ohpmrc                      # @atf 私仓 + 字节 ohpm 仓库
-├── build-profile.json5          # 工程配置（不含签名，用你自己的）
-├── oh-package.json5             # 根清单
-├── AppScope/                    # 应用级配置与图标
-└── entry/                       # 示例宿主 HAP
-    ├── build-profile.json5      # 演示参数（appID / mediaID / 广告位 ID）
-    ├── oh-package.json5         # SDK 依赖在这里
-    └── src/main/ets/
-        ├── entryability/EntryAbility.ets   # 生命周期入口
-        ├── demo/DemoSdkInit.ets            # SDK 初始化 + 适配器注册 + 权限申请
-        ├── demo/DemoSupport.ets            # 演示用的通用工具
-        └── pages/                          # 开屏 / 激励视频 / 插屏 / 信息流 / 原生 五种广告示例
+### 4.1 配置 ohpm 仓库
+
+SDK 与适配器发布在 `@atf` 私仓，账号由 SDK 负责人分配。在工程根目录新建 `.ohpmrc`：
+
+```ini
+# @atf 私仓（SDK 本体与适配器）
+@atf:registry=https://ohpm.cxwlad.com/repos/ohpm/
+
+# 穿山甲 GroMore 依赖 @csj/openadsdk，只在字节 ohpm 仓库有坐标
+registry=https://ohpm.openharmony.cn/ohpm/,https://artifact.bytedance.com/repository/byted-ohpm/
 ```
 
-演示参数集中在 `entry/build-profile.json5` 的 `buildProfileFields`（`DEMO_APP_ID`、
-`DEMO_MEDIA_ID`、各广告位 ID）。**换成你自己的参数**即可。
+私仓凭据写在你自己的 `~/.ohpm/.ohpmrc`，不要提交到仓库。
 
-## 接入到你自己的 App
+### 4.2 添加依赖
 
-### 1. 声明权限
+```json5
+// entry/oh-package.json5
+{
+  "dependencies": {
+    "@atf/openadsdk": "0.0.2",
+    "@atf/gromore": "0.0.1"
+  }
+}
+```
 
-`module.json5` 里需要（SDK 联网、网络状态与设备标识）：
+执行：
+
+```bash
+ohpm install --all
+```
+
+## 5. SDK 初始化
+
+在 `UIAbility.onCreate` 中完成初始化，**厂商适配器必须在 SDK 初始化之前注册**。
+
+```ts
+import { ATFAdSDK, EnvironmentType, SDKConfig } from '@atf/openadsdk';
+import { ATFGroMoreAdapter } from '@atf/gromore';
+import BuildProfile from 'BuildProfile';
+
+// 注册适配器（幂等，重复调用无副作用）
+ATFGroMoreAdapter.register();
+
+const config = SDKConfig.builder()
+  .appID(BuildProfile.DEMO_APP_ID)
+  .mediaID(BuildProfile.DEMO_MEDIA_ID)
+  .secretKey(BuildProfile.DEMO_SECRET_KEY)
+  // 开发环境会输出更完整的联调日志，上线请改为 EnvironmentType.production
+  .environmentType(EnvironmentType.development)
+  .build();
+
+// Context 由宿主注入：UIAbility 中直接用 this.context；
+// 页面中请用 this.getUIContext().getHostContext()（getContext() 已弃用）
+const success: boolean = await ATFAdSDK.start(this.context, config);
+```
+
+`ATFAdSDK` 常用接口：
+
+| 接口 | 说明 |
+| --- | --- |
+| `ATFAdSDK.start(context, config)` | 初始化 SDK，成功后才能请求广告 |
+| `ATFAdSDK.generateCreator<T>()` | 获取对应广告类型的构建器 |
+| `ATFAdSDK.isInitialized` | 是否已初始化 |
+| `ATFAdSDK.getAvailableAdapterNames()` | 当前已注册的适配器名称 |
+
+完整实现见 `entry/src/main/ets/demo/DemoSdkInit.ets`。
+
+## 6. 广告接入
+
+所有广告类型都通过 `AdSlot` 描述广告位：
+
+```ts
+import { AdSlot, AdType } from '@atf/openadsdk';
+
+const adSlot = new AdSlot('YOUR_SLOT_ID', AdType.splash, { width: screenW, height: screenH });
+```
+
+`load()` 返回 Promise：成功即加载完成，失败通过 `catch` 拿到错误。交互回调通过 `setListener()` 注册。
+
+### 6.1 开屏广告
+
+```ts
+const ad: SplashAd = await ATFAdSDK.generateCreator<SplashAd>()
+  .load(new AdSlot(slotID, AdType.splash, adSize));
+
+ad.setListener(listener);
+ad.show(windowStage, splashBottomView);   // 第二个参数为可选的宿主底部视图
+ad.isValid();
+```
+
+`adSize` 即广告区尺寸（vp），厂商开屏的 `acceptSize` 直接透传该值。宽取屏宽，高取屏高减去底部 Logo 高度（Demo 中为 88）。
+
+### 6.2 插屏广告
+
+```ts
+const ad: InterstitialAd = await ATFAdSDK.generateCreator<InterstitialAd>()
+  .load(new AdSlot(slotID, AdType.interstitial, adSize));
+
+ad.setListener(listener);
+ad.show(windowStage);
+```
+
+### 6.3 激励视频
+
+```ts
+const ad: RewardVideoAd = await ATFAdSDK.generateCreator<RewardVideoAd>()
+  .load(new AdSlot(slotID, AdType.rewardVideo, adSize));
+
+ad.setListener(listener);
+ad.show(windowStage);
+```
+
+奖励回调通过 `RewardVideoAdInteractionListener` 获取：
+
+```ts
+class MyRewardListener implements RewardVideoAdInteractionListener {
+  onPlayFinished(): void {}
+  onRewardEffective(isEffective: boolean, verify: boolean): void {}
+}
+```
+
+### 6.4 信息流
+
+模板渲染：
+
+```ts
+const ad: FeedAd = await ATFAdSDK.generateCreator<FeedAd>()
+  .load(new AdSlot(slotID, AdType.feed, adSize));
+
+const component = await ad.render(this.getUIContext());
+```
+
+自渲染：
+
+```ts
+const ad: NativeAd = await ATFAdSDK.generateCreator<NativeAd>().load(slot);
+ad.bindAd(new NativeAdViewArgs(rootViewID, [clickViewID], [creativeViewID]));
+```
+
+### 6.5 交互回调
+
+`AdInteractionListener` 提供通用回调，Demo 中的实现见 `entry/src/main/ets/demo/DemoSupport.ets`：
+
+| 回调 | 说明 |
+| --- | --- |
+| `onShow()` | 广告展示成功 |
+| `onShowFailed(error)` | 广告展示失败 |
+| `onClick()` | 广告被点击 |
+| `onClose()` | 广告关闭 |
+
+## 7. 厂商适配器
+
+| 适配器 | 包名 | 厂商 SDK 形态 | 接入方式 |
+| --- | --- | --- | --- |
+| 穿山甲 GroMore | `@atf/gromore` | 远程依赖 `@csj/openadsdk` 7.7.0 | 已默认开启，配好字节仓库即可 |
+| 优量汇 GDT | `@atf/gdt` | 优量汇在 ohpm 无坐标 | 需自备厂商 HAR，见 7.1 |
+| 快手联盟 | `@atf/kuaishou` | 内嵌在适配器 HAR 内 | 待发布，发布后按版本号引入 |
+| 美数 | `@atf/meishu` | 远程 `@admate/ms_sdk` | 待发布，发布后按版本号引入 |
+
+### 7.1 接入优量汇 GDT
+
+优量汇 SDK 在 ohpm 上没有公开坐标，适配器采用 peer 模式：`@atf/gdt` 自己不声明它，必须由接入方提供。缺少时编译报 `Failed to get a resolved OhmUrl for "@gdt/gdt-union-sdk"`。
+
+1. 从优量汇后台下载 HarmonyOS SDK，得到 `GDTUnionSDK-default-release.har`；
+2. 放到 `entry/libs/GDTUnionSDK-default-release.har`（本仓库已用 `.gitignore` 排除，厂商产物不要提交）；
+3. 补依赖：
+
+```json5
+// entry/oh-package.json5
+{
+  "dependencies": {
+    "@atf/openadsdk": "0.0.2",
+    "@atf/gromore": "0.0.1",
+    "@atf/gdt": "0.0.1",
+    "@gdt/gdt-union-sdk": "file:./libs/GDTUnionSDK-default-release.har"
+  }
+}
+```
+
+4. 在 `DemoSdkInit.ets` 中放开对应的 `import` 与 `ATFGDTAdapter.register();`。
+
+### 7.2 适配器注册
+
+适配器通过静态方法注册，**必须在 `ATFAdSDK.start()` 之前调用**，否则该广告源不参与竞价：
+
+```ts
+import { ATFGDTAdapter } from '@atf/gdt';
+import { ATFGroMoreAdapter } from '@atf/gromore';
+
+ATFGDTAdapter.register();
+ATFGroMoreAdapter.register();
+```
+
+## 8. 权限
+
+Demo 的 `module.json5` 已包含以下权限，接入时请同步到你的工程。
 
 ```json5
 {
@@ -83,103 +298,42 @@ ohos-openadsdk-demo/
 }
 ```
 
-> **设备标识**：鸿蒙没有 IDFA / IDFV，广告场景只有 **OAID**。`APP_TRACKING_CONSENT` 是
-> `user_grant` 权限，除了声明还要在用户同意隐私政策后调用
-> `abilityAccessCtrl.requestPermissionsFromUser` 动态申请（见 `demo/DemoSdkInit.ets`）。
-> 未声明或用户拒绝时，系统返回全 0 占位值，SDK 原样上报表示「未授权」，不会崩溃也不阻塞启动。
+### 8.1 设备标识 OAID
 
-### 2. 加依赖
-
-```json5
-// 你的 entry/oh-package.json5
-{
-  "dependencies": {
-    "@atf/openadsdk": "0.0.2",
-    "@atf/gromore": "0.0.1"
-  }
-}
-```
-
-### 3. 初始化
+HarmonyOS 没有 IDFA / IDFV，广告场景的设备标识只有 OAID。`ohos.permission.APP_TRACKING_CONSENT` 是 `user_grant` 权限，除声明外还需在用户同意隐私政策后动态申请：
 
 ```ts
-import { ATFAdSDK, SDKConfig, EnvironmentType, AdSlot, AdSlotBuilder, AdType } from '@atf/openadsdk';
-import { ATFGroMoreAdapter } from '@atf/gromore';
+import { abilityAccessCtrl, common, Permissions } from '@kit.AbilityKit';
 
-// 厂商适配器必须在 SDK 初始化之前注册（幂等，重复调用无副作用）
-ATFGroMoreAdapter.register();
-
-const config = SDKConfig.builder()
-  .appID('你的 appID')
-  .mediaID('你的 mediaID')
-  .secretKey('你的 secretKey')
-  .environmentType(EnvironmentType.production)
-  .build();
-
-// Context 由宿主注入：页面里用 getUIContext().getHostContext()，
-// UIAbility 里可直接用 this.context（getContext() 已弃用，不要再用）
-const context = this.getUIContext().getHostContext();
-if (context === undefined) {
-  return;
-}
-
-// 必须在用户同意隐私政策之后调用
-const success: boolean = await ATFAdSDK.start(context, config);
-
-const slot = new AdSlotBuilder()
-  .slotID('你的广告位ID')
-  .adType(AdType.draw)
-  .build();
+const permissions: Permissions[] = ['ohos.permission.APP_TRACKING_CONSENT'];
+const atManager = abilityAccessCtrl.createAtManager();
+await atManager.requestPermissionsFromUser(context, permissions);
 ```
 
-完整可运行版本见 `entry/src/main/ets/demo/DemoSdkInit.ets`。
+未声明或用户拒绝时，系统返回全 0 占位值，SDK 会原样上报表示「未授权」，不会崩溃也不阻塞启动。
 
-## 接入更多厂商
+## 9. 常见问题
 
-本示例默认只带 `@atf/gromore`（依赖全部来自可公开访问的仓库）。其余适配器按下表处理：
+**Q：`ohpm install` 报 `package '@atf/openadsdk@0.0.2' not found`？**
+A：确认 `.ohpmrc` 里已配置 `@atf:registry=https://ohpm.cxwlad.com/repos/ohpm/`，且 `~/.ohpm/.ohpmrc` 里有该私仓的凭据。
 
-| 适配器 | 厂商 SDK 形态 | 接入方式 |
-|---|---|---|
-| `@atf/gromore` 穿山甲 | 远程 `@csj/openadsdk` 7.7.0 | **已默认开启**，只需 `.ohpmrc` 配好字节仓库 |
-| `@atf/gdt` 优量汇 | 优量汇在 ohpm **没有坐标** | 需自备厂商 HAR，见下 |
-| `@atf/kuaishou` 快手 | 厂商 SDK 内嵌在适配器 HAR 内 | 待发布，发布后按版本号加依赖即可 |
-| `@atf/meishu` 美数 | 远程 `@admate/ms_sdk`（ohpm 公开仓） | 待发布，发布后按版本号加依赖即可 |
+**Q：`ohpm install` 报 `package '@csj/openadsdk@7.7.0' not found`？**
+A：使用 `@atf/gromore` 时必须在 `registry` 中加入 `https://artifact.bytedance.com/repository/byted-ohpm/`（注意是 `byted-ohpm`，不是 `ohpm`）。
 
-### 接入优量汇 `@atf/gdt`
+**Q：编译报 `Failed to get a resolved OhmUrl for "@gdt/gdt-union-sdk"`？**
+A：使用了 `@atf/gdt` 但没有提供优量汇厂商 HAR，见「7.1 接入优量汇 GDT」。
 
-优量汇 SDK 在 ohpm 上没有公开坐标，适配器采用 **peer 模式**：`@atf/gdt` 自己不声明它，
-必须由接入方提供，否则编译期会报
-`Failed to get a resolved OhmUrl for "@gdt/gdt-union-sdk"`。
+**Q：广告源已安装，但该广告源不参与竞价？**
+A：确认对应的 `ATFxAdapter.register()` 已在 `ATFAdSDK.start()` 之前调用。
 
-1. 从优量汇后台下载 HarmonyOS SDK，得到 `GDTUnionSDK-default-release.har`；
-2. 放到 `entry/libs/GDTUnionSDK-default-release.har`（本仓库 `.gitignore` 已排除 `entry/libs/*.har`，
-   厂商产物不要提交入库）；
-3. 在 `entry/oh-package.json5` 补两条依赖：
+**Q：上报的 `oaid` 是全 0？**
+A：确认已声明 `ohos.permission.APP_TRACKING_CONSENT` 并在隐私政策同意后完成动态申请，见「8.1 设备标识 OAID」。
 
-   ```json5
-   {
-     "dependencies": {
-       "@atf/openadsdk": "0.0.2",
-       "@atf/gromore": "0.0.1",
-       "@atf/gdt": "0.0.1",
-       "@gdt/gdt-union-sdk": "file:./libs/GDTUnionSDK-default-release.har"
-     }
-   }
-   ```
+**Q：模拟器上请求不到广告？**
+A：部分厂商不向模拟器下发库存，请用真机验证。
 
-4. 放开 `demo/DemoSdkInit.ets` 里对应的 import 与 `ATFGDTAdapter.register();`。
+---
 
-## 常见问题
+## License
 
-| 现象 | 原因 | 处理 |
-|---|---|---|
-| `package '@atf/openadsdk@0.0.2' not found` | `.ohpmrc` 没配 `@atf:registry`，或私仓凭据缺失 | 确认 `.ohpmrc` 有 `@atf:registry`，并在 `~/.ohpm/.ohpmrc` 配好凭据 |
-| `package '@csj/openadsdk@7.7.0' not found` | 用的 `@atf/gromore`，但 `.ohpmrc` 没有字节仓库 | `registry` 里加上 `https://artifact.bytedance.com/repository/byted-ohpm/` |
-| `Failed to get a resolved OhmUrl for "@gdt/gdt-union-sdk"` | 用了 `@atf/gdt` 但没声明优量汇厂商 HAR | 见上文「接入优量汇」 |
-| 广告源已安装但没参与竞价 | 适配器没有在 SDK 初始化前注册 | 调用 `ATFxAdapter.register()`，放在 `ATFAdSDK.start` 之前 |
-| 上报的 `oaid` 是全 0 | 未声明或用户拒绝了 `APP_TRACKING_CONSENT` | 见「1. 声明权限」，并做动态申请 |
-| 模拟器上拉不到广告 | 部分厂商不向模拟器下发库存 | 用真机验证 |
-
-## 相关仓库
-
-- SDK 本体与适配器源码：`atfoenginex/ohos_openadsdk`
+[LICENSE](LICENSE)
