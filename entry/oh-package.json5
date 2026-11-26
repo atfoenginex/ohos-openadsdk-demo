@@ -1,0 +1,13 @@
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "ATFOHAdSDK demo host app",
+  "main": "",
+  "author": "atf",
+  "license": "MIT",
+  "dependencies": {
+    "@atf/openadsdk": "0.0.2",
+    "@atf/gromore": "0.0.1"
+  },
+  "devDependencies": {}
+}

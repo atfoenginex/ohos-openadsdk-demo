@@ -1,0 +1,12 @@
+{
+  "modelVersion": "5.0.0",
+  "name": "ohos-openadsdk-demo",
+  "version": "1.0.0",
+  "description": "ATFOHAdSDK 鸿蒙接入示例（对接 @atf 私仓已发布版本）",
+  "main": "",
+  "author": "atf",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {},
+  "dynamicDependencies": {}
+}

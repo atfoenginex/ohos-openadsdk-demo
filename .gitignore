@@ -1,0 +1,19 @@
+# 构建产物与依赖
+oh_modules/
+**/oh_modules/
+build/
+**/build/
+.hvigor/
+**/.hvigor/
+oh-package-lock.json5
+**/oh-package-lock.json5
+local.properties
+**/BuildProfile.ets
+
+# 签名材料（接入方自备，不入库）
+**/*.p12
+**/*.cer
+**/*.p7b
+
+# 厂商 SDK 由接入方自行下载（授权产物，不入库）
+entry/libs/*.har

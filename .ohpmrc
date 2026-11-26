@@ -1,0 +1,4 @@
+# @atf 私仓（SDK 本体与已发布适配器）
+@atf:registry=https://ohpm.cxwlad.com/repos/ohpm/
+# 穿山甲 GroMore 依赖 @csj/openadsdk，只在字节 ohpm 仓库有坐标
+registry=https://ohpm.openharmony.cn/ohpm/,https://artifact.bytedance.com/repository/byted-ohpm/

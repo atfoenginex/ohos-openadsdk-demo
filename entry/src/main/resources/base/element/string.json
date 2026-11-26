@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "ATFOHAdSDK demo host"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "ATFOHAdSDK demo entry"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "ATFOHAdSDK"
+    },
+    {
+      "name": "oaid_permission_reason",
+      "value": "用于获取 OAID，以便提供与设备相关的广告服务"
+    },
+    {
+      "name": "location_permission_reason",
+      "value": "用于获取模糊位置，以便提供与地域相关的广告服务"
+    }
+  ]
+}

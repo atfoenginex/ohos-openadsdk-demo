@@ -1,0 +1,10 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/SplashAdPage",
+    "pages/InterstitialAdPage",
+    "pages/RewardVideoAdPage",
+    "pages/FeedAdPage",
+    "pages/NativeAdPage"
+  ]
+}

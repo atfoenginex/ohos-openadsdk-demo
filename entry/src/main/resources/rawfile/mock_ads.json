@@ -1,0 +1,83 @@
+{
+  "ads": [
+    {
+      "ad_id": "sisheng_411",
+      "ad_type": 4,
+      "click": {
+        "text": "点击查看详情"
+      },
+      "configs": {
+        "rwd_cfg": {
+          "mute": false,
+          "rate": 50
+        }
+      },
+      "slide": {
+        "distance": 120,
+        "direction": "up",
+        "threshold": 0
+      },
+      "shake": {
+        "x": [],
+        "y": [],
+        "z": [],
+        "freq": 20,
+        "threshold": 2.2
+      },
+      "creative": {
+        "description": "开屏-直链测试",
+        "image": {
+          "h": 1280,
+          "url": "https://img1.360buyimg.com/pop/jfs/t1/53862/26/17536/89730/627b810aEd7b714fe/ca6cd39e6bf8d86e.jpg",
+          "w": 720
+        },
+        "video": {
+          "url": "https://media.w3.org/2010/05/sintel/trailer.mp4",
+          "size": 4372373,
+          "duration": 0
+        },
+        "icon": {
+          "url": "https://placehold.co/128x128/356FF6/FFFFFF/png?text=AD"
+        },
+        "logo_url": "https://img.cxwlad.com/img/B675CA7F-4472-4809-ABF5-C2B98D14A789.jpg",
+        "source": "淘宝",
+        "title": "开屏-直链测试",
+        "tracking_list": [
+          {
+            "event": 1,
+            "urls": [
+              "http://tracking.adunimax.com:8000/xyHoms/monitorInfo/exposure?id=10012195_800000635&money=a833b183892f37b47ad284309a44bb8d&mid=55637f298954281ec138b106bc27fd57&requestId=24964366-a19b-4c0b-a886-64435aaee276&gid=&pkg=com.didapinche.taxi&mediaKey=&did=d4665eab1af1592ad8e52f67774b573d&adControlType=&taskId=&budget=linearChain&adType=3&mediaId=1927c43d486146afbed3151eb41c9c75&fcId=null&dspState=null&os=ios&bucketPkgName=com.taobao.taobao"
+            ]
+          },
+          {
+            "event": 2,
+            "urls": [
+              "http://tracking.adunimax.com:8000/xyHoms/monitorInfo/click?id=10012195_800000635&money=&mid=&requestId=24964366-a19b-4c0b-a886-64435aaee276&gid=&pkg=com.didapinche.taxi&mediaKey=&did=d4665eab1af1592ad8e52f67774b573d&adControlType=&taskId=&budget=linearChain&adType=3&mediaId=1927c43d486146afbed3151eb41c9c75&fcId=null&dspState=null&os=ios&bucketPkgName=com.taobao.taobao"
+            ]
+          },
+          {
+            "event": 9,
+            "urls": [
+              "http://tracking.adunimax.com:8000/xyHoms/monitorInfo/dp?id=10012195_800000635&requestId=24964366-a19b-4c0b-a886-64435aaee276&gid=&mediaKey=&did=d4665eab1af1592ad8e52f67774b573d&adControlType=&pkg=com.didapinche.taxi"
+            ]
+          }
+        ],
+        "landing_url": "https://tzkh5.1haozc.com/miniToC?c=TG&s=TG&channelName=TXGGXKC&activityName=TXGGBJ&launchSource=TXGGBJPTCCJ&redirectUrl=%2Fpages%2Forder-hall%2Forder-hall",
+        "deeplink_url": "https://tzkh5.1haozc.com/miniToC?c=TG&s=TG&channelName=TXGGXKC&activityName=TXGGBJ&launchSource=TXGGBJPTCCJ&redirectUrl=%2Fpages%2Forder-hall%2Forder-hall"
+      },
+      "dsp_id": "sisheng",
+      "dsp_tag_id": "10012195",
+      "expiration_time": 1778570475,
+      "price": 700,
+      "render_type": 2,
+      "sdk": {
+        "bandw": 10,
+        "timeout": 3000
+      },
+      "style_id": 9006
+    }
+  ],
+  "processing_time": 52,
+  "request_id": "B9629FE4-1DAD-4D20-B6F3-CA3058ED2DA6",
+  "status_code": 0
+}
