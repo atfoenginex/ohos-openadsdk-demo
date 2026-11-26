@@ -62,9 +62,9 @@ export class DemoRewardVideoListener extends DemoAdListener implements RewardVid
     this.log('🎉 激励视频播放完成');
   }
 
-  onRewardEffective(isEffective: boolean, verify: boolean): void {
+  onRewardEffective(verify: boolean): void {
     this.status('奖励已发放', DEMO_COLOR_SHOWING);
-    this.log(`🎁 奖励发放: ${isEffective}, 服务端验证: ${verify}`);
+    this.log(`🎁 奖励发放, 服务端验证: ${verify}`);
   }
 }
 

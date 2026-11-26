@@ -6,8 +6,8 @@
   "author": "atf",
   "license": "MIT",
   "dependencies": {
-    "@atf/openadsdk": "0.0.2",
-    "@atf/gromore": "0.0.1"
+    "@atf/openadsdk": "1.0.2",
+    "@atf/gromore": "1.0.2"
   },
   "devDependencies": {}
 }

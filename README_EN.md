@@ -105,8 +105,8 @@ Put your private registry credentials in `~/.ohpm/.ohpmrc` and never commit them
 // entry/oh-package.json5
 {
   "dependencies": {
-    "@atf/openadsdk": "0.0.2",
-    "@atf/gromore": "0.0.1"
+    "@atf/openadsdk": "1.0.2",
+    "@atf/gromore": "1.0.2"
   }
 }
 ```
@@ -203,7 +203,7 @@ Reward callbacks come from `RewardVideoAdInteractionListener`:
 ```ts
 class MyRewardListener implements RewardVideoAdInteractionListener {
   onPlayFinished(): void {}
-  onRewardEffective(isEffective: boolean, verify: boolean): void {}
+  onRewardEffective(verify: boolean): void {}
 }
 ```
 
@@ -257,9 +257,9 @@ GDT's SDK has no public ohpm coordinate, so the adapter uses the peer model: `@a
 // entry/oh-package.json5
 {
   "dependencies": {
-    "@atf/openadsdk": "0.0.2",
-    "@atf/gromore": "0.0.1",
-    "@atf/gdt": "0.0.1",
+    "@atf/openadsdk": "1.0.2",
+    "@atf/gromore": "1.0.2",
+    "@atf/gdt": "1.0.2",
     "@gdt/gdt-union-sdk": "file:./libs/GDTUnionSDK-default-release.har"
   }
 }
@@ -315,7 +315,7 @@ If the permission is missing or denied, the system returns an all-zero placehold
 
 ## 9. FAQ
 
-**Q: `ohpm install` fails with `package '@atf/openadsdk@0.0.2' not found`.**
+**Q: `ohpm install` fails with `package '@atf/openadsdk@1.0.2' not found`.**
 A: Make sure `.ohpmrc` contains `@atf:registry=https://ohpm.cxwlad.com/repos/ohpm/` and that `~/.ohpm/.ohpmrc` holds credentials for that registry.
 
 **Q: `ohpm install` fails with `package '@csj/openadsdk@7.7.0' not found`.**

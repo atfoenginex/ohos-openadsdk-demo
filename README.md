@@ -106,8 +106,8 @@ registry=https://ohpm.openharmony.cn/ohpm/,https://artifact.bytedance.com/reposi
 // entry/oh-package.json5
 {
   "dependencies": {
-    "@atf/openadsdk": "0.0.2",
-    "@atf/gromore": "0.0.1"
+    "@atf/openadsdk": "1.0.2",
+    "@atf/gromore": "1.0.2"
   }
 }
 ```
@@ -204,7 +204,7 @@ ad.show(windowStage);
 ```ts
 class MyRewardListener implements RewardVideoAdInteractionListener {
   onPlayFinished(): void {}
-  onRewardEffective(isEffective: boolean, verify: boolean): void {}
+  onRewardEffective(verify: boolean): void {}
 }
 ```
 
@@ -258,9 +258,9 @@ ad.bindAd(new NativeAdViewArgs(rootViewID, [clickViewID], [creativeViewID]));
 // entry/oh-package.json5
 {
   "dependencies": {
-    "@atf/openadsdk": "0.0.2",
-    "@atf/gromore": "0.0.1",
-    "@atf/gdt": "0.0.1",
+    "@atf/openadsdk": "1.0.2",
+    "@atf/gromore": "1.0.2",
+    "@atf/gdt": "1.0.2",
     "@gdt/gdt-union-sdk": "file:./libs/GDTUnionSDK-default-release.har"
   }
 }
@@ -316,7 +316,7 @@ await atManager.requestPermissionsFromUser(context, permissions);
 
 ## 9. 常见问题
 
-**Q：`ohpm install` 报 `package '@atf/openadsdk@0.0.2' not found`？**
+**Q：`ohpm install` 报 `package '@atf/openadsdk@1.0.2' not found`？**
 A：确认 `.ohpmrc` 里已配置 `@atf:registry=https://ohpm.cxwlad.com/repos/ohpm/`，且 `~/.ohpm/.ohpmrc` 里有该私仓的凭据。
 
 **Q：`ohpm install` 报 `package '@csj/openadsdk@7.7.0' not found`？**
